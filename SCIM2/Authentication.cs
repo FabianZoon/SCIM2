@@ -17,66 +17,65 @@ namespace DiligenteSCIM2
         #endregion
 
         #region Properties
-        private AuthenticationMode _authenticationMode;
-        public AuthenticationMode getAuthenticationMode
+        private readonly AuthenticationMode authenticationMode;
+        public AuthenticationMode GetAuthenticationMode
         {
             get
             {
-                return _authenticationMode;
+                return authenticationMode;
             }
         }
 
         #endregion 
 
 
-        public Authentication(HttpRequest httpRequest, iAuthenticationModes authenticationMode)
+        public Authentication(HttpRequest httpRequest, IAuthenticationModes iAuthenticationMode)
         {
-            
-            if (authenticationMode is BasicAuth)
+
+            if (iAuthenticationMode is BasicAuth basicAuth)
             {
-                BasicAuth basicAuth = (BasicAuth)authenticationMode;
                 string basicrheader = httpRequest.Headers["Authorization"];
-                if (basicrheader == null) throw new HttpException(401,"no authorization");
-                if (!basicrheader.StartsWith("Basic ")) throw new HttpException(401,"not a basic authorization");
+                if (basicrheader == null) throw new HttpException(401, "no authorization");
+                if (!basicrheader.StartsWith("Basic ")) throw new HttpException(401, "not a basic authorization");
 
                 var encoding = Encoding.GetEncoding("iso-8859-1");
                 string credentials = encoding.GetString(Convert.FromBase64String(basicrheader.Substring(6)));
-                if (credentials != string.Format("{0}:{1}", basicAuth.Username, basicAuth.Password)) throw new HttpException(401,"invalid token");
-                _authenticationMode = AuthenticationMode.BasicAuth;
+                if (credentials != string.Format("{0}:{1}", basicAuth.Username, basicAuth.Password)) throw new HttpException(401, "invalid token");
+                authenticationMode = AuthenticationMode.BasicAuth;
                 return; // call is authenticated
             }
-            if (authenticationMode is HTTPHeader)
+            if (iAuthenticationMode is HTTPHeader httpHeader )
             {
                 string bearerheader = httpRequest.Headers["Authorization"];
                 if (bearerheader == null) throw new HttpException(401,"no authorization");
                 if (!bearerheader.StartsWith("Bearer ")) throw new HttpException(401,"not a bearer authorization");
-                if (bearerheader != "Bearer " + ((HTTPHeader)authenticationMode).Token) throw new HttpException(401,"invalid token");
-                _authenticationMode = AuthenticationMode.HTTPHeader;
+                if (bearerheader != "Bearer " + httpHeader.Token) throw new HttpException(401,"invalid token");
+                authenticationMode = AuthenticationMode.HTTPHeader;
                 return; // call is authenticated
             }
-            if (authenticationMode is OAUth2)
+            if (iAuthenticationMode is OAUth2)
             {
-                _authenticationMode = AuthenticationMode.OAuth2;
+                //_authenticationMode = AuthenticationMode.OAuth2;
                 throw new Exception("OAuth authentication is not yet implemented");
             }
 
         }
 
 
-        public interface iAuthenticationModes { }
+        public interface IAuthenticationModes { }
 
-        public class BasicAuth : iAuthenticationModes
+        public class BasicAuth : IAuthenticationModes
         {
             public string Username { get; set; }
             public string Password { get; set; }
         }
 
-        public class HTTPHeader : iAuthenticationModes
+        public class HTTPHeader : IAuthenticationModes
         {
             public string Token { get; set; }
         }
 
-        public class OAUth2 : iAuthenticationModes
+        public class OAUth2 : IAuthenticationModes
         {
             public string Access_token_endpoint_URI { get; set; }
             public string Authorization_endpoint_URI { get; set; }

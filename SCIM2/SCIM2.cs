@@ -14,18 +14,43 @@ namespace DiligenteSCIM2
         //https://tools.ietf.org/html/rfc7644
         //https://docs.microsoft.com/en-us/dotnet/standard/serialization/system-text-json-how-to
         public enum HttpMethod { GET, PUSH, DELETE, PATCH, PUT }
-        public int? startIndex = null;
-        public int? count = null;
-        public SCIM2(HttpRequest httpRequest, HttpResponse httpResponse, iAuthenticationModes authenticationMode)
+       
+        private readonly HttpRequest _httpRequest;
+        private readonly HttpResponse _httpResponse;
+        private Authentication authenticate;
+        private bool Authenticated;
+
+
+        #region delegates
+        public delegate Result getUser(object id);
+        public delegate Result getUsers(int startIndex, int count);
+
+        public event getUser GetUser;
+        public event getUsers GetUsers;
+        #endregion
+
+
+
+        #region Constructor
+        public SCIM2(HttpRequest httpRequest, HttpResponse httpResponse)
         {
+            _httpRequest = httpRequest;
+            _httpResponse = httpResponse;
+            Authenticated = false;
+        }
+        #endregion
 
+        public void Authenticate (IAuthenticationModes authenticationMode)
+        {
+           authenticate= new Authentication(_httpRequest, authenticationMode);
+           Authenticated = true;
+        }
 
-            Authentication authenticate = new Authentication(httpRequest, authenticationMode);
-            if (!Enum.TryParse(httpRequest.HttpMethod, out HttpMethod httpMethod)) throw new Exception("unknown HTTP Method");
-            string endPoint = httpRequest.PathInfo;
-
-            startIndex = IQString(httpRequest, "startIndex");
-            count = IQString(httpRequest, "count");
+        public void Process()
+        {
+            if (!Authenticated) throw new HttpException(401, "not authenticated");
+            if (!Enum.TryParse(_httpRequest.HttpMethod, out HttpMethod httpMethod)) throw new Exception("unknown HTTP Method");
+            string endPoint = _httpRequest.PathInfo;
 
             Result result = null;
 
@@ -35,7 +60,9 @@ namespace DiligenteSCIM2
                     switch (httpMethod)
                     {
                         case HttpMethod.GET:
-                            result = Users.Get(startIndex, count);
+                            int startIndex = IQString(_httpRequest, "startIndex");
+                            int count = IQString(_httpRequest, "count");
+                            if (GetUsers!=null) result = GetUsers(startIndex, count);
                             break;
                     }
                     break;
@@ -45,18 +72,21 @@ namespace DiligenteSCIM2
             if (result != null)
             {
                 string json = JsonSerializer.Serialize<Result>(result);
-                httpResponse.Clear();
-                httpResponse.ContentType = "application/json";
-                httpResponse.Write(json);
-                httpResponse.End();
+                _httpResponse.Clear();
+                _httpResponse.ContentType = "application/json";
+                _httpResponse.Write(json);
+                _httpResponse.End();
             }
 
-            throw new Exception(string.Format("{0} {1}", httpRequest.RawUrl, authenticate.getAuthenticationMode));
+            throw new Exception(string.Format("{0} {1}", _httpRequest.RawUrl, authenticate.GetAuthenticationMode));
+
+
         }
 
-        private int? IQString(HttpRequest httpRequest, string key)
+      
+        private int IQString(HttpRequest httpRequest, string key, int defaultValue=1)
         {
-            int? retval = null;
+            int retval = defaultValue;
             if (httpRequest.QueryString[key] != null)
             {
                 if (!int.TryParse(httpRequest.QueryString[key], out int ivalue)) retval = ivalue;

@@ -17,8 +17,11 @@ namespace SCIM2_Server
             try
             {
                 // Authentication.HTTPHeader httpHeader = new Authentication.HTTPHeader() { Token="geheim"};
-                Authentication.BasicAuth httpHeader = new Authentication.BasicAuth() { Username = "gebruikersnaam", Password = "ditisgeheim" };
-                SCIM2 scim2 = new SCIM2(Request, Response, httpHeader);
+                Authentication.BasicAuth authentication = new Authentication.BasicAuth() { Username = "gebruikersnaam", Password = "ditisgeheim" };
+                SCIM2 scim2 = new SCIM2(Request, Response);
+                scim2.Authenticate(authentication);
+                scim2.GetUsers += GetUsers;
+                scim2.Process();
             }
             catch (Exception ex)
             {
@@ -28,6 +31,15 @@ namespace SCIM2_Server
                 Application.UnLock();
                
             }
+        }
+
+        Result GetUsers(int startIndex, int count)
+        {
+            Result result = new Result(SchemasHelper.Schema.ListResponse);
+            List<Resources> resources = new List<Resources>();
+            resources.Add(new Resources(SchemasHelper.Schema.User));
+            result.Resources = resources.ToArray();
+            return result;
         }
 
     }

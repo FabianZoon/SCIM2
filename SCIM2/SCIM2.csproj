@@ -73,9 +73,8 @@
     <Compile Include="Authentication.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Result.cs" />
+    <Compile Include="Schema.cs" />
     <Compile Include="SCIM2.cs" />
-    <Compile Include="User.cs" />
-    <Compile Include="Users.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
