@@ -21,12 +21,11 @@ namespace DiligenteSCIM2
 
 
             Authentication authenticate = new Authentication(httpRequest, authenticationMode);
-            HttpMethod httpMethod;
-            if (!Enum.TryParse(httpRequest.HttpMethod, out httpMethod)) throw new Exception("unknown HTTP Method");
+            if (!Enum.TryParse(httpRequest.HttpMethod, out HttpMethod httpMethod)) throw new Exception("unknown HTTP Method");
             string endPoint = httpRequest.PathInfo;
 
-            startIndex = iQString(httpRequest, "startIndex");
-            count = iQString(httpRequest, "count");
+            startIndex = IQString(httpRequest, "startIndex");
+            count = IQString(httpRequest, "count");
 
             Result result = null;
 
@@ -45,14 +44,6 @@ namespace DiligenteSCIM2
 
             if (result != null)
             {
-
-                byte[] jsonUtf8Bytes;
-                var options = new JsonSerializerOptions
-                {
-                    WriteIndented = true
-                };
-                jsonUtf8Bytes = JsonSerializer.SerializeToUtf8Bytes(result, options);
-
                 string json = JsonSerializer.Serialize<Result>(result);
                 httpResponse.Clear();
                 httpResponse.ContentType = "application/json";
@@ -60,16 +51,15 @@ namespace DiligenteSCIM2
                 httpResponse.End();
             }
 
-             throw new Exception(string.Format("{0} {1}", httpRequest.RawUrl, authenticate.getAuthenticationMode));
+            throw new Exception(string.Format("{0} {1}", httpRequest.RawUrl, authenticate.getAuthenticationMode));
         }
 
-        private int? iQString(HttpRequest httpRequest, string key)
+        private int? IQString(HttpRequest httpRequest, string key)
         {
             int? retval = null;
             if (httpRequest.QueryString[key] != null)
             {
-                int ivalue;
-                if (!int.TryParse(httpRequest.QueryString[key], out ivalue)) retval = ivalue;
+                if (!int.TryParse(httpRequest.QueryString[key], out int ivalue)) retval = ivalue;
             }
             return retval;
         }
