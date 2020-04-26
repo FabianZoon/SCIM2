@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30002.166
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCIM2-Server", "SCIM2-Server\SCIM2-Server.csproj", "{6EC26DD6-A066-405B-8D62-863C00328E41}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCIM2", "SCIM2\SCIM2.csproj", "{463DA912-207B-4F85-B9EF-9816D2AF1FF0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6EC26DD6-A066-405B-8D62-863C00328E41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EC26DD6-A066-405B-8D62-863C00328E41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EC26DD6-A066-405B-8D62-863C00328E41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EC26DD6-A066-405B-8D62-863C00328E41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{463DA912-207B-4F85-B9EF-9816D2AF1FF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{463DA912-207B-4F85-B9EF-9816D2AF1FF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{463DA912-207B-4F85-B9EF-9816D2AF1FF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{463DA912-207B-4F85-B9EF-9816D2AF1FF0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {789B1394-7BCB-4A74-9E54-4D68658C5CE6}
+	EndGlobalSection
+EndGlobal
