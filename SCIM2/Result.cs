@@ -32,7 +32,7 @@ namespace DiligenteSCIM2
             set => itemsPerPage = value;
         }
         public int StartIndex { get; set; }
-        public Resources[] Resources { get; set; }
+        public Object[] Resources { get; set; }
 
 
         public Result(SchemasHelper.Schema schema)
@@ -42,13 +42,6 @@ namespace DiligenteSCIM2
         }
     }
 
-    public class Resources
-    {
-        public string[] Schemas { get; set; }
-        public Resources(SchemasHelper.Schema schema)
-        {
-            Schemas = SchemasHelper.Get(schema);
-        }
-    }
+   
 
 }
