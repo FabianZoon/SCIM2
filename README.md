@@ -6,4 +6,25 @@ It's called SCIM App wizard and information can be found at https://help.okta.co
 
 This project containts the SCIM2 Libarary and an Example SCIM2-server.
 
-This version is in pre-alpha and at this moment not functional.
+This version is in alpha and at this moment not functional.
+
+
+Create a ashx web page and page and implement the functions as needed.
+
+        public void ProcessRequest(HttpContext context)
+        {
+            // Authentication.HTTPHeader httpHeader = new Authentication.HTTPHeader() { Token="secrettoken"};
+            Authentication.BasicAuth authentication = new Authentication.BasicAuth() { Username = "username", Password = "password" };
+            SCIM2 scim2 = new SCIM2(context.Request, context.Response);
+            scim2.Authenticate(authentication);
+            scim2.NewUser += Scim2_NewUser;
+            scim2.GetUser += Scim2_GetUser;
+            scim2.GetUsers += Scim2_GetUsers;
+            scim2.GetUserKey += Scim2_GetUserKey;
+            scim2.DelUser += Scim2_DelUser;
+            scim2.UpdateUser += Scim2_UpdateUser;
+
+            scim2.Log += Scim2_Log;
+
+            scim2.Process();
+        }
