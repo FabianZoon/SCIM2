@@ -3,15 +3,15 @@ SCIM 2.0 .Net Library. Especially designed for OKTA provisioning.
 
 see also https://sites.google.com/diligente.nl/oktakladblok/
 
-Early Access feature of Okta is to provisioning any application with SCIM (2.0)
+Early Access feature of Okta is to provision any application with SCIM (2.0)
 It's called SCIM App wizard and information can be found at https://help.okta.com/en/prod/Content/Topics/Apps/Apps_App_Integration_Wizard.htm
 
-This project containts the SCIM2 Libarary and an Example SCIM2-server.
+This project containts the SCIM2 Library and an Example SCIM2-server.
+The library is also available as nuget package at https://www.nuget.org/packages/Diligente_SCIM2/
 
-This version is in alpha and at this moment not functional.
 
 
-Create a ashx web page and page and implement the functions as needed.
+Create a ashx page and implement the functions you need.
 
         public void ProcessRequest(HttpContext context)
         {
