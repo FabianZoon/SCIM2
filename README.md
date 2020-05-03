@@ -2,6 +2,7 @@
 SCIM 2.0 .Net Library. Especially designed for OKTA provisioning.
 
 see also https://sites.google.com/diligente.nl/oktakladblok/
+or watch the demo at https://youtu.be/6XSloVbt15A
 
 Early Access feature of Okta is to provision any application with SCIM (2.0)
 It's called SCIM App wizard and information can be found at https://help.okta.com/en/prod/Content/Topics/Apps/Apps_App_Integration_Wizard.htm
